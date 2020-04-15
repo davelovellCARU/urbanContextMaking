@@ -37,10 +37,12 @@ Use hashed phone numbers, emails and postcodes. But first check that they are un
 
 ```{r checkphoneNumsUnique}
 responses %$%
-  paste0(pers_phone,pers_email,pers_postcode) -> digestThis
+  paste0(pers_phone,pers_email,pers_postcode) %>% 
+  digest::sha1() %>% 
+  str_sub(1,8) -> digested
 
-if(!(length(digestThis) == length(unique(digestThis))))
-  error("Unique IDs are not unique!") else responses %<>% mutate(uniqueId = digest::sha1(digestThis))
+if(!(length(digested) == length(unique(digested))))
+  error("Unique IDs are not unique!") else responses$uniqueId = digested
 
 #Bring uniqueId to the front
 responses %<>% relocate(uniqueId)
