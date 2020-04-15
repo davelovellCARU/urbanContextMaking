@@ -86,7 +86,7 @@ all(nchar(responses$pers_phone) == 11, na.rm = TRUE)
 #Not all phone numbers are eleven digits long.
 
 responses %>% 
-  select(pers_name, pers_phone) %>% 
+  select(uniqueId, pers_phone) %>% 
   filter(nchar(pers_phone) != 11)  %>% 
   mutate(pers_phone = paste0(str_sub(pers_phone,1,4), "[REDACTED]"))
 
