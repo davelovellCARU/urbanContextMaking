@@ -83,7 +83,7 @@ all(str_detect(responses$pers_phone,"\\D", negate = TRUE), na.rm = TRUE)
 
 all(nchar(responses$pers_phone) == 11, na.rm = TRUE)
 
-#Not all phone numbers are eleve digits.
+#Not all phone numbers are eleven digits long.
 
 responses %>% 
   select(pers_name, pers_phone) %>% 
@@ -93,10 +93,14 @@ responses %>%
 ## That 10 digit phone number matches the one on the paper form - it's a respondent mistake
 ```
 
-### Check Postcodes
+### Check Personal Postcodes
 
 ```{r checkPostcodes, collapse = TRUE}
-all(str_detect(responses$pers_postcode, carutools::ct_postcode_regex()), na.rm = TRUE)
+sum(str_detect(responses$pers_postcode, carutools::ct_postcode_regex(), negate = TRUE), na.rm = TRUE)
+
+# There were 5 of these the first time the above line ran! All confusions between i's, 1's, 0's and O's, now corrected in the csv. As for the above:
+
+responses %<>% mutate(pers_postcode = str_remove(pers_postcode, "[:space:]*London$"))
 ```
 
 
