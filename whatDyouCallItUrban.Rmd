@@ -13,8 +13,16 @@ knitr::opts_chunk$set(echo = TRUE)
 library("here")
 library("readr")
 library("dplyr")
+library("purrr")
 ```
 ## Look see what we have here
 
 ### Read in that Data!
+
+```{r readData, message = FALSE}
+responses <- readr::read_csv(here::here("data/urbanContextData.csv"))
+spec(responses)
+```
+
+
 
