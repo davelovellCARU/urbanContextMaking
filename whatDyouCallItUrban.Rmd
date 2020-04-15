@@ -15,6 +15,7 @@ library("readr")
 library("dplyr")
 library("digest")
 library("magrittr")
+library("stringr")
 ```
 ## Intro
 
@@ -44,9 +45,9 @@ if(!(length(digestThis) == length(unique(digestThis))))
 responses %<>% relocate(uniqueId)
 ```
 
-<!-- ### Capitalise names -->
+### Capitalise names
 
-<!-- ```{r namecapitalisation} -->
-<!-- responses %<>% mutate(pers_name = str_to_title(pers_name)) -->
-<!-- ``` -->
+```{r namecapitalisation}
+responses %<>% mutate(pers_name = str_to_title(pers_name))
+```
 
