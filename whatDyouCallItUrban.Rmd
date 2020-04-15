@@ -53,10 +53,28 @@ responses %<>% relocate(uniqueId)
 responses %<>%
   mutate(across(is.character,str_squish))
 ```
+
 ### Capitalise names
 
 ```{r namecapitalisation}
 responses %<>% mutate(pers_name = str_to_title(pers_name))
+```
+
+### Check emails
+
+Do they have an '@' sign ect.?
+
+```{r checkEmails, collapse = TRUE}
+  # Do any email addresses contain whitespace?
+  any(str_detect(responses$pers_email, "[:space:]"), na.rm = TRUE)
+  # Do all emails look a least vaguely like an email?
+  all(str_detect(responses$pers_email, ".+@.+\\..+"), na.rm = TRUE)
+```
+
+### Check Phone Numbers
+
+```{r checkPhones, collapse = TRUE}
+
 ```
 
 
