@@ -16,6 +16,7 @@ library("dplyr")
 library("digest")
 library("magrittr")
 library("stringr")
+library("carutools") #devtools::install_github("davelovellCARU/carutools")
 ```
 ## Intro
 
@@ -73,8 +74,29 @@ Do they have an '@' sign ect.?
 
 ### Check Phone Numbers
 
-```{r checkPhones, collapse = TRUE}
+And remove all whitespace
 
+```{r checkPhones, collapse = TRUE}
+responses %<>% mutate(pers_phone = str_remove_all(pers_phone, "[:space:]"))
+
+all(str_detect(responses$pers_phone,"\\D", negate = TRUE), na.rm = TRUE)
+
+all(nchar(responses$pers_phone) == 11, na.rm = TRUE)
+
+#Not all phone numbers are eleve digits.
+
+responses %>% 
+  select(pers_name, pers_phone) %>% 
+  filter(nchar(pers_phone) != 11)  %>% 
+  mutate(pers_phone = paste0(str_sub(pers_phone,1,4), "[REDACTED]"))
+
+## That 10 digit phone number matches the one on the paper form - it's a respondent mistake
+```
+
+### Check Postcodes
+
+```{r checkPostcodes, collapse = TRUE}
+all(str_detect(responses$pers_postcode, carutools::ct_postcode_regex()), na.rm = TRUE)
 ```
 
 
