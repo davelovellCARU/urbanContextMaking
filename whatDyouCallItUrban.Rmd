@@ -131,3 +131,13 @@ unique(responses$pers_gender)
 ```{r estatePolishing}
 responses %<>% mutate(con_estate = str_to_title(con_estate))
 ```
+
+### Check Leadership Ratings
+
+They all need to be between 1 and 10
+
+```{r checkLeadNumbers, collapse = TRUE}
+responses %>% 
+  summarise(across(starts_with("lead_"), ~all(.<=10 & .>=1, na.rm = TRUE))) %>% 
+  glimpse
+```
