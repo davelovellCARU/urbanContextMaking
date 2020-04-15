@@ -125,3 +125,9 @@ responses %<>% mutate(pers_gender =
 
 unique(responses$pers_gender)
 ```
+
+### Polish Estate Names
+
+```{r estatePolishing}
+responses %<>% mutate(con_estate = str_to_title(con_estate))
+```
