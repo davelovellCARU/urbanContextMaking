@@ -111,3 +111,17 @@ all(responses$pers_age > 10, na.rm = TRUE)
 all(responses$pers_age < 114, na.rm = TRUE)
 ```
 
+### Tidy Up Gender Data
+
+```{r tidyGender, collapse = TRUE}
+responses %<>% mutate(pers_gender = str_to_lower(pers_gender))
+
+unique(responses$pers_gender)
+
+responses %<>% mutate(pers_gender = 
+                        pers_gender %>% 
+                        {replace(.,.=="m", "male")} %>% 
+                        {replace(.,.=="f", "female")})
+
+unique(responses$pers_gender)
+```
