@@ -105,5 +105,9 @@ sum(str_detect(responses$pers_postcode, carutools::ct_postcode_regex(), negate =
 responses %<>% mutate(pers_postcode = str_remove(pers_postcode, "[:space:]*London$"))
 ```
 
-
+### Check ages
+```{r ageCheck, collapse = TRUE}
+all(responses$pers_age > 10, na.rm = TRUE)
+all(responses$pers_age < 114, na.rm = TRUE)
+```
 
