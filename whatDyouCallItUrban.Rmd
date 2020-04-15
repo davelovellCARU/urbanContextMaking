@@ -45,9 +45,19 @@ if(!(length(digestThis) == length(unique(digestThis))))
 responses %<>% relocate(uniqueId)
 ```
 
+### Squish all strings
+
+(Remove double and trailing whitespace from character columns)
+
+```{r stringSquish}
+responses %<>%
+  mutate(across(is.character,str_squish))
+```
 ### Capitalise names
 
 ```{r namecapitalisation}
 responses %<>% mutate(pers_name = str_to_title(pers_name))
 ```
+
+
 
