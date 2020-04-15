@@ -13,8 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library("here")
 library("readr")
 library("dplyr")
-library("purrr")
+library("digest")
+library("magrittr")
 ```
+## Intro
+
+For the time being, we're just creating a csv that makes sense and is nice to look at - so no factors or anything.
+
 ## Look see what we have here
 
 ### Read in that Data!
@@ -24,5 +29,24 @@ responses <- readr::read_csv(here::here("data/urbanContextData.csv"))
 spec(responses)
 ```
 
+## Create Unique IDs
 
+Use hashed phone numbers, emails and postcodes. But first check that they are unique.
+
+```{r checkphoneNumsUnique}
+responses %$%
+  paste0(pers_phone,pers_email,pers_postcode) -> digestThis
+
+if(!(length(digestThis) == length(unique(digestThis))))
+  error("Unique IDs are not unique!") else responses %<>% mutate(uniqueId = digest::sha1(digestThis))
+
+#Bring uniqueId to the front
+responses %<>% relocate(uniqueId)
+```
+
+<!-- ### Capitalise names -->
+
+<!-- ```{r namecapitalisation} -->
+<!-- responses %<>% mutate(pers_name = str_to_title(pers_name)) -->
+<!-- ``` -->
 
