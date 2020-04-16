@@ -193,18 +193,24 @@ makeWordCols <- function(string = NULL, uniqueWords = NULL, sep = ";") {
   wordCols <- map_lgl(anchoredWordRegexList, ~ any(str_detect(wordsVector,.)))
   names(wordCols) <- uniqueWords %>% 
     str_to_title %>% 
-    str_remove_all("[:space:]")
+    str_remove_all("[:space:]") %>% 
+    str_remove_all("-") %>% 
+    {paste0(str_to_lower(str_sub(.,1,1)), str_sub(.,2,-1))}
   
   wordCols <- as_tibble_row(wordCols)
   return(wordCols)
 }
 
 responses <- responses %>% 
-  group_by_at(vars(-now_words, - grew_words)) %>% 
+  group_by_at(vars(-now_words, -grew_words)) %>% 
   summarise(across(all_of(c("now_words", "grew_words")),
                     ~ makeWordCols(string = ., uniqueWords = uniqueWords))) %>% 
-   unpack(all_of(c("now_words", "grew_words")), names_sep = "_") 
+   unpack(all_of(c("now_words", "grew_words")), names_sep = "_") %>% 
+  ungroup
 
-responses %<>% relocate(across(starts_with(now_words), -now_words), before = now_words)
-responses %<>% relocate(across(starts_with(grew_words), -grew_words, before = grew_words))
+# Relocate new columns
+responses %<>% relocate(starts_with("now_words"),  before = grew_description)
+responses %<>% relocate(starts_with("grew_words"), before = fj_faithJourney)
+
+glimpse(responses)
 ```
