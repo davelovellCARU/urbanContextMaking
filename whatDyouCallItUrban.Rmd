@@ -158,3 +158,10 @@ responses %<>%
 responses %<>% relocate(church_postcode, after = church_location)
 ```
 
+### Expanding Descriptive Word strings into Logical Columns
+
+```{r expandingWordStrings}
+
+responses %<>% mutate(across(all_of(c("grew_words", "now_words")), str_to_lower))
+
+```
