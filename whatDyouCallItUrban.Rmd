@@ -179,4 +179,18 @@ responses %>%
 
 uniqueWords
 
+### Function to make columns from unique words
+
+makeWordCols <- function(string = NULL, uniqueWords = uniqueWords, sep = ";") {
+  
+  wordsVector = str_split(string, sep = sep, simplify = TRUE) %>%
+    str_trim
+  
+  anchoredWordRegex = paste0("^", uniqueWords, "$")
+  
+  wordCols <- tibble(anchoredWordRegex %in% wordsVector,
+                     names = uniqueWords)
+}
+
+
 ```
