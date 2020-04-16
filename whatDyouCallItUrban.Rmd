@@ -146,7 +146,13 @@ responses %>%
 ### Extract Postcodes from Church Location
 
 ```{r postcodeExtract, collapse = TRUE}
+# Which things don't have postcodes?
 responses %>% 
   select(uniqueId, church_location) %>% 
   filter(negate(ct_contains_postcode)(church_location))
+
+# Extract postcodes
+responses %<>%
+  mutate(church_postcode = ct_extract_postcode(church_location))
 ```
+
