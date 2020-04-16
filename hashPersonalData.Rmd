@@ -7,12 +7,20 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library("dplyr")
+library("digest")
 ```
 
 ## Hashing the Data
 
 ```{r hashData, collapse = TRUE}
-readr::read_csv(here::here("data/urbanContextReponses.csv")) -> unhashed
+readr::read_csv(here::here("data/urbanContextResponses.csv")) -> unhashed
 
 names(unhashed)
+
+unhashed %>% 
+  rowwise %>% 
+  mutate(across(all_of(c("pers_email", "pers_postcode", "pers_name", "pers_phone")), 
+                sha1)) %>% 
+  write.csv("data/urbanContextResponses_anonymous.csv")
 ```
