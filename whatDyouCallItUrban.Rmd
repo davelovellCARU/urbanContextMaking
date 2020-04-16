@@ -41,7 +41,7 @@ Use hashed phone numbers, emails and postcodes. But first check that they are un
 ```{r checkphoneNumsUnique}
 responses %$%
   paste0(pers_phone,pers_email,pers_postcode) %>% 
-  digest::sha1() %>% 
+  sapply(digest::sha1) %>% 
   str_sub(1,8) -> digested
 
 if(!(length(digested) == length(unique(digested))))
@@ -199,11 +199,12 @@ makeWordCols <- function(string = NULL, uniqueWords = NULL, sep = ";") {
   return(wordCols)
 }
 
-responses %>% 
-  rowwise %>% 
- summarise(across(all_of(c("now_words", "grew_words")),
-                   ~ makeWordCols(string = ., uniqueWords = uniqueWords))) %>% 
-  unpack(everything(), names_sep = "_")
-  
-  
+responses <- responses %>% 
+  group_by_at(vars(-now_words, - grew_words)) %>% 
+  summarise(across(all_of(c("now_words", "grew_words")),
+                    ~ makeWordCols(string = ., uniqueWords = uniqueWords))) %>% 
+   unpack(all_of(c("now_words", "grew_words")), names_sep = "_") 
+
+responses %<>% relocate(across(starts_with(now_words), -now_words), before = now_words)
+responses %<>% relocate(across(starts_with(grew_words), -grew_words, before = grew_words))
 ```
