@@ -18,6 +18,8 @@ library("magrittr")
 library("stringr")
 library("carutools") #devtools::install_github("davelovellCARU/carutools")
 library("purrr")
+library("tibble")
+library("tidyr")
 ```
 ## Intro
 
@@ -27,7 +29,7 @@ For the time being, we're just creating a csv that makes sense and is nice to lo
 
 ### Read in that Data!
 
-```{r readData, message = FALSE}
+```{r readData, message=FALSE}
 responses <- readr::read_csv(here::here("data/urbanContextData.csv"))
 spec(responses)
 ```
@@ -181,16 +183,27 @@ uniqueWords
 
 ### Function to make columns from unique words
 
-makeWordCols <- function(string = NULL, uniqueWords = uniqueWords, sep = ";") {
+makeWordCols <- function(string = NULL, uniqueWords = NULL, sep = ";") {
   
-  wordsVector = str_split(string, sep = sep, simplify = TRUE) %>%
+  wordsVector = str_split(string, pattern = sep, simplify = TRUE) %>%
     str_trim
   
-  anchoredWordRegex = paste0("^", uniqueWords, "$")
+  anchoredWordRegexList = as.list(paste0("^", uniqueWords, "$"))
   
-  wordCols <- tibble(anchoredWordRegex %in% wordsVector,
-                     names = uniqueWords)
+  wordCols <- map_lgl(anchoredWordRegexList, ~ any(str_detect(wordsVector,.)))
+  names(wordCols) <- uniqueWords %>% 
+    str_to_title %>% 
+    str_remove_all("[:space:]")
+  
+  wordCols <- as_tibble_row(wordCols)
+  return(wordCols)
 }
 
-
+responses %>% 
+  rowwise %>% 
+ summarise(across(all_of(c("now_words", "grew_words")),
+                   ~ makeWordCols(string = ., uniqueWords = uniqueWords))) %>% 
+  unpack(everything(), names_sep = "_")
+  
+  
 ```
