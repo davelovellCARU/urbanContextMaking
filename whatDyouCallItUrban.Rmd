@@ -219,5 +219,5 @@ responses %>%
   mutate(across(is.character,~ str_sub(.,1,13))) %>% 
   glimpse
 
-write.csv(responses, here::here("data/urbanContextReponses.csv"), row.names = FALSE, quote = TRUE)
+write.csv(responses, here::here("data/urbanContextResponses.csv"), row.names = FALSE, quote = TRUE)
 ```

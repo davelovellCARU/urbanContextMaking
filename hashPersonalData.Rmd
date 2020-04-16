@@ -1,0 +1,18 @@
+---
+title: "hashContextData"
+author: "Dave Lovell"
+date: "16/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Hashing the Data
+
+```{r hashData, collapse = TRUE}
+readr::read_csv(here::here("data/urbanContextReponses.csv")) -> unhashed
+
+names(unhashed)
+```
