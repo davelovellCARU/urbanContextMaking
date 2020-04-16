@@ -157,7 +157,7 @@ responses %>%
 responses %<>%
   mutate(church_postcode = ct_extract_postcode(church_location))
 
-responses %<>% relocate(church_postcode, before = church_location)
+responses %<>% relocate(church_postcode, .before = church_location)
 ```
 
 ### Expanding Descriptive Word strings into Logical Columns
@@ -209,8 +209,10 @@ responses <- responses %>%
   ungroup
 
 # Relocate new columns
-responses %<>% relocate(starts_with("now_words"),  before = grew_description)
-responses %<>% relocate(starts_with("grew_words"), before = fj_faithJourney)
+responses %<>% relocate(starts_with("now_words"),  .before = grew_description)
+responses %<>% relocate(starts_with("grew_words"), .before = fj_faithJourney)
 
+
+names(responses)
 glimpse(responses)
 ```
