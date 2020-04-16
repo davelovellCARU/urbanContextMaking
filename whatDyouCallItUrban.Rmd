@@ -155,13 +155,28 @@ responses %>%
 responses %<>%
   mutate(church_postcode = ct_extract_postcode(church_location))
 
-responses %<>% relocate(church_postcode, after = church_location)
+responses %<>% relocate(church_postcode, before = church_location)
 ```
 
 ### Expanding Descriptive Word strings into Logical Columns
 
 ```{r expandingWordStrings}
-
+#Make lowercase
 responses %<>% mutate(across(all_of(c("grew_words", "now_words")), str_to_lower))
+
+# Split each string at ';', then get the unique words
+responses %>%
+  rowwise %>% 
+  summarise(across(all_of(c("grew_words", "now_words")),
+            ~{
+              list(str_split(.,";", simplify = TRUE) %>%
+                str_trim %>% 
+                unique) 
+            })) %>% 
+  ungroup %>% 
+  summarise(across(everything(), ~ list(unique(unlist(.))))) %$% 
+  unique(unlist(grew_words), unlist(now_words)) -> uniqueWords
+
+uniqueWords
 
 ```
