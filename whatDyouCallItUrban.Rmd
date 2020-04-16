@@ -212,7 +212,12 @@ responses <- responses %>%
 responses %<>% relocate(starts_with("now_words"),  .before = grew_description)
 responses %<>% relocate(starts_with("grew_words"), .before = fj_faithJourney)
 
+## Look at it all one last time...
 
-names(responses)
-glimpse(responses)
+responses %>% 
+  rename_all( ~ str_sub(.,1, 21)) %>% 
+  mutate(across(is.character,~ str_sub(.,1,13))) %>% 
+  glimpse
+
+write.csv(responses, "urbanContextReponses.csv", row.names = FALSE, quote = TRUE)
 ```
