@@ -154,5 +154,7 @@ responses %>%
 # Extract postcodes
 responses %<>%
   mutate(church_postcode = ct_extract_postcode(church_location))
+
+responses %<>% relocate(church_postcode, after = church_location)
 ```
 
