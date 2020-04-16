@@ -17,6 +17,7 @@ library("digest")
 library("magrittr")
 library("stringr")
 library("carutools") #devtools::install_github("davelovellCARU/carutools")
+library("purrr")
 ```
 ## Intro
 
@@ -140,4 +141,12 @@ They all need to be between 1 and 10
 responses %>% 
   summarise(across(starts_with("lead_"), ~all(.<=10 & .>=1, na.rm = TRUE))) %>% 
   glimpse
+```
+
+### Extract Postcodes from Church Location
+
+```{r postcodeExtract, collapse = TRUE}
+responses %>% 
+  select(uniqueId, church_location) %>% 
+  filter(negate(ct_contains_postcode)(church_location))
 ```
